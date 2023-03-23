@@ -46,7 +46,7 @@ class BookingController extends Controller
     public function bookedCheckByDate(Request $request)
     {
         $date = Carbon::parse($request->date)->format('Y-m-d');
-        $data = BookingList::whereDate('available', $date)->get();
+        $data = BookingList::with(['booked'])->whereDate('available', $date)->get();
 
         $list=[];
         if($data)
@@ -55,7 +55,8 @@ class BookingController extends Controller
             {
                 $list[]=array(
                     'id'=>$item->id,
-                    'time'=> Carbon::parse($item->available)->format('H:i')
+                    'time'=> Carbon::parse($item->available)->format('H:i'),
+                    'booked'=>$item->booked
                 );
             }
         }
@@ -64,10 +65,24 @@ class BookingController extends Controller
 
     public function bookedCheckByMonth(Request $request)
     {
-        $date = Carbon::parse($request->date)->format('Y-m');
-        $data=BookingList::whereDate('available',$date)->get();
-
-        return $this->successResponse($data);
+        $year = Carbon::parse($request->date)->format('Y');
+        $month = Carbon::parse($request->date)->format('m');
+        $data=BookingList::whereYear('available',$year)->whereMonth('available',$month)->get();
+        $list=[];
+        if($data)
+        {
+            foreach ($data as $item)
+            {
+                $list[]=array(
+                    'id'=>$item->id,
+                    'year' => (int)Carbon::parse($item->available)->format('Y'),
+                    'month' => (int)Carbon::parse($item->available)->format('m'),
+                    'date'=> (int)Carbon::parse($item->available)->format('d'),
+                    'status'=>$item->status
+                );
+            }
+        }
+        return $this->successResponse($list);
     }
 
     public function bookedCheck(Request $request, $id)
@@ -114,6 +129,10 @@ class BookingController extends Controller
 
         $data->confirm='Y';
         $data->save();
+
+        $book=BookingList::find($request->id);
+        $book->status='booked';
+        $book->save();
 
         return $this->successResponse($data);
     }
