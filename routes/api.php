@@ -35,11 +35,12 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::put('/bookinglist/update/{id}', 'update')->name('update');
         Route::delete('/bookinglist/remove/{id}', 'remove')->name('remove');
     });
-
-    Route::controller(BookingController::class)->name('Booking.')->group(function () {
-        Route::post('/booking/booked', 'booked')->name('booked');
-        Route::post('/booking/confirm', 'bookConfirm')->name('bookConfirm');
-        Route::get('/booking/check/{id}', 'bookedCheck')->name('bookedCheck');
-    });
 });
 
+Route::controller(BookingController::class)->name('Booking.')->group(function () {
+    Route::post('/booking/booked', 'booked')->name('booked');
+    Route::post('/booking/confirm', 'bookConfirm')->name('bookConfirm');
+    Route::get('/booking/check/{id}', 'bookedCheck')->name('bookedCheck');
+    Route::get('/booking/check-by-date', 'bookedCheckByDate')->name('bookedCheckByDate');
+    Route::get('/booking/check-by-month', 'bookedCheckByMonth')->name('bookedCheckByMonth');
+});

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\BookingList;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
 use Ramsey\Uuid\Uuid as GeneratorUuid;
@@ -42,11 +43,38 @@ class BookingController extends Controller
         return $this->successResponse($data);
     }
 
-    public function bookedCheck(Request $request,$id)
+    public function bookedCheckByDate(Request $request)
+    {
+        $date = Carbon::parse($request->date)->format('Y-m-d');
+        $data = BookingList::whereDate('available', $date)->get();
+
+        $list=[];
+        if($data)
+        {
+            foreach ($data as $item)
+            {
+                $list[]=array(
+                    'id'=>$item->id,
+                    'time'=> Carbon::parse($item->available)->format('H:i')
+                );
+            }
+        }
+        return $this->successResponse($list);
+    }
+
+    public function bookedCheckByMonth(Request $request)
+    {
+        $date = Carbon::parse($request->date)->format('Y-m');
+        $data=BookingList::whereDate('available',$date)->get();
+
+        return $this->successResponse($data);
+    }
+
+    public function bookedCheck(Request $request, $id)
     {
         // $date = Carbon::parse($request->date)->format('Y-m-d');
-        $data=Booking::where('confirm','Y')
-            ->where('bookinglist_id',$id)
+        $data = Booking::where('confirm', 'Y')
+            ->where('bookinglist_id', $id)
             // ->whereDate('available',$date)
             ->first();
 
