@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::get('/bookinglist/row/{id}', 'byID')->name('byID');
         Route::get('/bookinglist/by-date/list', 'byDate')->name('byDate');
         Route::post('/bookinglist/create', 'create')->name('create');
+        Route::post('/bookinglist/create-by-month', 'createByMonth')->name('createByMonth');
         Route::put('/bookinglist/update/{id}', 'update')->name('update');
         Route::delete('/bookinglist/remove/{id}', 'remove')->name('remove');
     });

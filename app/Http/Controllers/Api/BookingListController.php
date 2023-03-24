@@ -78,6 +78,29 @@ class BookingListController extends Controller
         return $this->successResponse($list);
     }
 
+    public function createByMonth(Request $request)
+    {
+        $request->validate(
+            [
+                'month'=>'required|date_format:Y-m'
+            ]
+        );
+
+        $list=[];
+        $month=$request->month;
+        $last_day=(int)Carbon::parse($month)->endOfMonth()->format('d');
+        for ($i=1; $i <= $last_day; $i++){ 
+            $list[]=array(
+                'id' => GeneratorUuid::uuid4()->toString(),
+                'available'=>Carbon::parse($month.'-'.$i)->format('Y-m-d'),
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString()
+            );
+        }
+        BookingList::insert($list);
+        return $this->successResponse($list);
+    }
+
     public function update(Request $request,$id)
     {
         $request->validate(
