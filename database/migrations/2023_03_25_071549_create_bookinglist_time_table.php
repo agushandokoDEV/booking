@@ -13,13 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bookinglist', function (Blueprint $table) {
+        Schema::create('bookinglist_time', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->date('available_at')->unique();
-            $table->enum('status', ['empty','filled', 'full'])->default('empty');
+            $table->foreignUuid('bookinglist_id');
+            $table->time('available_at');
+            $table->enum('status', ['booked', 'available'])->default('available');
             $table->boolean('can_book')->default(true);
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bookinglist');
+        Schema::dropIfExists('bookinglist_time');
     }
 };

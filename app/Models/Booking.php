@@ -14,7 +14,7 @@ class Booking extends Model
     public $incrementing = false;
     protected $table = 'booking';
     protected $keyType = 'string';
-    protected $fillable = ['bookinglist_id', 'booking_name','email','token','confirm','token_exp','ket'];
+    protected $fillable = ['bookinglisttime_id', 'booking_name','email','token','confirm','token_exp','ket'];
 
     protected $hidden = [
         'deleted_at',

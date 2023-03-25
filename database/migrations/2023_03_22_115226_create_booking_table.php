@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('booking', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('bookinglist_id');
-            $table->string('booking_name');
+            $table->foreignUuid('bookinglisttime_id');
+            $table->string('booking_name')->nullable();
             $table->string('email');
-            $table->string('token');
+            $table->string('token')->nullable();
             $table->enum('confirm', ['Y', 'N'])->default('N');
-            $table->dateTime('token_exp');
-            $table->longText('ket');
+            $table->dateTime('token_exp')->nullable();
+            $table->longText('ket')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

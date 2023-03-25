@@ -31,7 +31,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::get('/bookinglist/list', 'list')->name('list');
         Route::get('/bookinglist/row/{id}', 'byID')->name('byID');
         Route::get('/bookinglist/by-date/list', 'byDate')->name('byDate');
-        Route::post('/bookinglist/create', 'create')->name('create');
+        // Route::post('/bookinglist/create', 'create')->name('create');
         Route::post('/bookinglist/create-by-month', 'createByMonth')->name('createByMonth');
         Route::put('/bookinglist/update/{id}', 'update')->name('update');
         Route::delete('/bookinglist/remove/{id}', 'remove')->name('remove');
@@ -39,9 +39,10 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
 });
 
 Route::controller(BookingController::class)->name('Booking.')->group(function () {
+    Route::get('/booking/list-date', 'bookedCheckByMonth')->name('bookedCheckByMonth');
+    Route::get('/booking/list-time', 'bookedListTime')->name('bookedListTime');
+    Route::get('/booking/check-by-date', 'checkByDate')->name('checkByDate');
     Route::post('/booking/booked', 'booked')->name('booked');
+    Route::get('/booking/check/{token}', 'bookedCheckbyToken')->name('bookedCheckbyToken');
     Route::post('/booking/confirm', 'bookConfirm')->name('bookConfirm');
-    Route::get('/booking/check/{id}', 'bookedCheck')->name('bookedCheck');
-    Route::get('/booking/check-by-date', 'bookedCheckByDate')->name('bookedCheckByDate');
-    Route::get('/booking/check-by-month', 'bookedCheckByMonth')->name('bookedCheckByMonth');
 });

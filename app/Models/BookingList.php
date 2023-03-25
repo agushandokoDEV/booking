@@ -14,7 +14,7 @@ class BookingList extends Model
     public $incrementing = false;
     protected $table = 'bookinglist';
     protected $keyType = 'string';
-    protected $fillable = ['available', 'status'];
+    protected $fillable = ['available_at', 'status','can_book'];
 
     protected $hidden = [
         'deleted_at',
@@ -29,5 +29,10 @@ class BookingList extends Model
     public function booked()
     {
         return $this->hasOne(Booking::class, 'bookinglist_id','id')->where('confirm', 'Y');
+    }
+
+    public function listtime()
+    {
+        return $this->hasMany(BookingListTime::class, 'bookinglist_id')->orderBy('available_at', 'ASC');
     }
 }
